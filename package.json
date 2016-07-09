@@ -21,7 +21,7 @@
   "scripts": {
     "build:dev": "./node_modules/webpack/bin/webpack.js",
     "build:watch": "./node_modules/webpack/bin/webpack.js -w",
-    "build:prod": "./node_modules/webpack/bin/webpack.js -p",
+    "build:prod": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
