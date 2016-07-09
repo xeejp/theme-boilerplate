@@ -27,12 +27,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ryo33/xee_double_auction.git"
+    "url": "git+https://github.com/xeejp/experiment-boilerplate.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ryo33/xee_double_auction/issues"
+    "url": "https://github.com/xeejp/experiment-boilerplate/issues"
   },
-  "homepage": "https://github.com/ryo33/xee_double_auction#readme",
+  "homepage": "https://github.com/xeejp/experiment-boilerplate#readme",
   "description": ""
 }

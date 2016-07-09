@@ -1,4 +1,4 @@
-# experiment-boilerplate
+# Experiment Boilerplate
 React + Redux with Webpack
 
 ## Installation

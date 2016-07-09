@@ -1,4 +1,4 @@
-defmodule ChickenRace do
+defmodule YourApplication do
   use Xee.ThemeScript
 
   # Callbacks
