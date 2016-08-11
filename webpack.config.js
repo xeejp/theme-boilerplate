@@ -19,7 +19,7 @@ module.exports = {
       "", ".js"
     ],
     modulesDirectories: [
-      "node_modules",
+      "node_modules", "./"
     ]
   }
 };
