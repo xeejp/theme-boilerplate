@@ -4,18 +4,28 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import createLogger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
+import { createAction } from 'redux-actions'
+import reduceReducers from 'reduce-reducers'
+import { createJsondiffpatch } from 'jsondiffpatch'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 export default function startApp(component, reducer, saga) {
+  const patch = createAction('@@boilerplate/patch', diff => diff)
+
+  const jsondiffpatch = createJsondiffpatch({})
+  const patcher = handleAction(patch, (state, { payload: diff }) => {
+    return jsondiffpatch.patch(state, diff)
+  })
+
   const logger = createLogger();
   const sagaMiddleware = createSagaMiddleware()
 
   let middlewares = [sagaMiddleware, logger]
 
   const store = createStore(
-    reducer,
+    reduceReducers(reducer, patcher),
     applyMiddleware(...middlewares)
   )
 
@@ -23,8 +33,9 @@ export default function startApp(component, reducer, saga) {
 
   var _experiment = new Experiment(_topic, _token);
 
-  _experiment.onReceiveMessage(({ action }) => {
+  _experiment.onReceiveMessage(({ action, diff }) => {
     store.dispatch(action)
+    store.dispatch(patch(diff))
   })
 
   function sendData(action, params=null) {

@@ -8,6 +8,10 @@ defmodule YourApplication do
 
   def install, do: nil
 
+  def diff(old_data, new_data) do
+    diff = JsonDiffEx.diff(old_data, new_data)
+  end
+
   def init do
     {:ok, %{data: %{
      }}}
