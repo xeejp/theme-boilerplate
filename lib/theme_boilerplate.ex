@@ -1,5 +1,5 @@
 defmodule YourApplication do
-  use Xee.ThemeScript
+  use XeeThemeScript
 
   # Callbacks
   def script_type do
@@ -9,19 +9,19 @@ defmodule YourApplication do
   def install, do: nil
 
   def init do
-    {:ok, %{"data" => %{
+    {:ok, %{data: %{
      }}}
   end
 
   def join(data, id) do
-    {:ok, %{"data" => data}}
+    {:ok, %{data: data}}
   end
 
   def handle_received(data, _received) do
-    {:ok, %{"data" => data}}
+    {:ok, %{data: data}}
   end
 
   def handle_received(data, _action, _id) do
-    {:ok, %{"data" => data}}
+    {:ok, %{data: data}}
   end
 end
