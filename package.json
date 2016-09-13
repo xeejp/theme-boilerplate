@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": "^6.8.0",
+    "jsondiffpatch": "^0.2.3",
     "react": "^15.0.2",
     "react-dom": "^15.0.1",
     "react-redux": "^4.4.5",
     "react-tap-event-plugin": "^1.0.0",
+    "reduce-reducers": "^0.1.2",
     "redux": "^3.5.2",
-    "redux-actions": "^0.10.1",
+    "redux-act": "^1.0.0",
     "redux-logger": "^2.6.1",
     "redux-saga": "^0.10.4"
   },
@@ -21,8 +23,8 @@
     "webpack": "^1.13.0"
   },
   "scripts": {
-    "build:dev": "./node_modules/webpack/bin/webpack.js",
-    "build:watch": "./node_modules/webpack/bin/webpack.js -w",
+    "build:dev": "webpack",
+    "build:watch": "webpack -w",
     "build:prod": "cross-env NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p --config webpack.production.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

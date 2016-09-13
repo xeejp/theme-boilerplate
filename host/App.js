@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-const mapStateToProps = ({}) => ({
-})
+import { fetchContents } from 'shared/actions'
+
+const actionCreators = {
+  fetchContents
+}
 
 class App extends Component {
   constructor(props, context) {
@@ -11,12 +14,15 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.props.fetchContents();
   }
 
   render() {
-    return <div>
-    </div>
+    return (
+      <div>
+      </div>
+    )
   }
 }
 
-export default connect()(App)
+export default connect(null, actionCreators)(App)
