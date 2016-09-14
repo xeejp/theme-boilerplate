@@ -3,12 +3,12 @@ defmodule YourApplication.Actions do
   alias YourApplication.Host
 
   def update_host_contents(data) do
-    host = get_action("update contents", Host.filter_data(data))
+    host = get_action("update contents", Host.filter_data(data, diff: false))
     format(data, host)
   end
 
   def update_participant_contents(data, id) do
-    participant = dispatch_to(id, get_action("update contents", Participant.filter_data(data, id)))
+    participant = dispatch_to(id, get_action("update contents", Participant.filter_data(data, id, diff: false)))
     format(data, nil, participant)
   end
 

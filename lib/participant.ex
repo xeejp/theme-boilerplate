@@ -1,7 +1,5 @@
 defmodule YourApplication.Participant do
-  alias YourApplication.Main
-
-  def filter_data(data, id) do
+  def filter_data(data, id, diff: diff) do
     map = %{
       participants: %{
         id => true
@@ -9,7 +7,9 @@ defmodule YourApplication.Participant do
       participants_number: "participantsNumber",
       _spread: [[:participants, id]]
     }
-    Main.filter_data(data, map)
+    data
+    |> Transmap.transform(map, diff: diff)
+    |> Map.delete(:participants)
   end
 end
 

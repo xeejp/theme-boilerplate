@@ -2,9 +2,6 @@ defmodule YourApplication.Main do
   alias YourApplication.Host
   alias YourApplication.Participant
 
-  @default_key :_default
-  @spread_key :_spread
-
   def init do
     %{
       participants: %{},
@@ -34,9 +31,9 @@ defmodule YourApplication.Main do
     participant = Map.get(result, :participant, %{})
     diff = JsonDiffEx.diff(old, new)
     participant_tasks = Enum.map(old.participants, fn {id, _} ->
-      {id, Task.async(fn -> Participant.filter_data(diff, id) end)}
+      {id, Task.async(fn -> Participant.filter_data(diff, id, diff: true) end)}
     end)
-    host_task = Task.async(fn -> Host.filter_data(diff) end)
+    host_task = Task.async(fn -> Host.filter_data(diff, diff: true) end)
     host_diff = Task.await(host_task)
     participant_diff = Enum.map(participant_tasks, fn {id, task} -> {id, %{diff: Task.await(task)}} end)
                         |> Enum.filter(fn {_, map} -> map_size(map.diff) != 0 end)
@@ -56,48 +53,5 @@ defmodule YourApplication.Main do
       Map.merge(v1, v2)
     end)
     %{data: new, host: host, participant: participant}
-  end
-
-  def filter_data(data, true), do: data
-  def filter_data(data, _) when not is_map(data), do: data
-  def filter_data(data, rule) when is_map(data) do
-    default = Map.get(rule, @default_key, false)
-    spread = Map.get(rule, @spread_key, [])
-    {data, rule} = apply_spread(data, rule, spread)
-    data = Enum.reduce(data, %{}, fn {id, value}, result ->
-      {id, rule_value} = case Map.get(rule, id, default) do
-        string when is_binary(string) -> {string, true}
-        {id, rule_value} -> {id, rule_value}
-        rule_value -> {id, rule_value}
-      end
-      if rule_value != false do
-        filtered = filter_data(value, rule_value)
-        case filtered do
-          map when is_map(map) and map_size(map) == 0 -> result
-          other -> Map.put(result, id, other)
-        end
-      else
-        result
-      end
-    end)
-  end
-
-  defp apply_spread(data, rule, spread) do
-    {data, rule} = Enum.reduce(spread, {data, rule}, fn keys, {data, rule} ->
-      {data_map, data} = pop_in(data, keys)
-      {rule_map, rule} = pop_in(rule, keys)
-      if is_map(data_map) do
-        data = Map.merge(data, data_map)
-        rule = if is_map(rule_map) do
-          Map.merge(rule, rule_map)
-        else
-          rule_map = for {key, value} <- data_map, into: %{}, do: {key, true}
-          Map.merge(rule, rule_map)
-        end
-        {data, rule}
-      else
-        {data, rule}
-      end
-    end)
   end
 end
