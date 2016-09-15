@@ -13,10 +13,5 @@ defmodule YourApplication.Participant do
     Transmap.transform(data, get_filter(data, id), diff: false)
     |> Map.delete(:participants)
   end
-
-  def filter_diff(data, diff, id) do
-    Transmap.transform(diff, get_filter(data, id), diff: true)
-    |> Map.delete(:participants)
-  end
 end
 

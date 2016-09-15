@@ -9,8 +9,4 @@ defmodule YourApplication.Host do
   def filter_data(data) do
     Transmap.transform(data, get_filter(data), diff: false)
   end
-
-  def filter_diff(data, diff) do
-    Transmap.transform(diff, get_filter(data), diff: true)
-  end
 end

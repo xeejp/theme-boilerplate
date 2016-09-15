@@ -27,13 +27,15 @@ defmodule YourApplication.Main do
   end
 
   def compute_diff(old, %{data: new} = result) do
+    import Participant, only: [filter_data: 2]
+    import Host, only: [filter_data: 1]
+
     host = Map.get(result, :host, %{})
     participant = Map.get(result, :participant, %{})
-    diff = JsonDiffEx.diff(old, new)
     participant_tasks = Enum.map(old.participants, fn {id, _} ->
-      {id, Task.async(fn -> Participant.filter_diff(new, diff, id) end)}
+      {id, Task.async(fn -> JsonDiffEx.diff(filter_data(old, id), filter_data(new, id)) end)}
     end)
-    host_task = Task.async(fn -> Host.filter_diff(new, diff) end)
+    host_task = Task.async(fn -> JsonDiffEx.diff(filter_data(old), filter_data(new)) end)
     host_diff = Task.await(host_task)
     participant_diff = Enum.map(participant_tasks, fn {id, task} -> {id, %{diff: Task.await(task)}} end)
                         |> Enum.filter(fn {_, map} -> map_size(map.diff) != 0 end)
