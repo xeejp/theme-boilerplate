@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "babel-polyfill": "^6.8.0",
+    "clone": "^1.0.2",
     "jsondiffpatch": "^0.2.3",
     "react": "^15.0.2",
     "react-dom": "^15.0.1",
