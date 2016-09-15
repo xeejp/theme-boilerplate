@@ -1,14 +1,21 @@
 defmodule YourApplication.Participant do
-  def filter_data(data, id, diff: diff) do
-    map = %{
+  def get_filter(data, id) do
+    %{
       participants: %{
         id => true
       },
       participants_number: "participantsNumber",
       _spread: [[:participants, id]]
     }
-    data
-    |> Transmap.transform(map, diff: diff)
+  end
+
+  def filter_data(data, id) do
+    Transmap.transform(data, get_filter(data, id), diff: false)
+    |> Map.delete(:participants)
+  end
+
+  def filter_diff(data, diff, id) do
+    Transmap.transform(diff, get_filter(data, id), diff: true)
     |> Map.delete(:participants)
   end
 end

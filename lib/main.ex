@@ -31,9 +31,9 @@ defmodule YourApplication.Main do
     participant = Map.get(result, :participant, %{})
     diff = JsonDiffEx.diff(old, new)
     participant_tasks = Enum.map(old.participants, fn {id, _} ->
-      {id, Task.async(fn -> Participant.filter_data(diff, id, diff: true) end)}
+      {id, Task.async(fn -> Participant.filter_diff(new, diff, id) end)}
     end)
-    host_task = Task.async(fn -> Host.filter_data(diff, diff: true) end)
+    host_task = Task.async(fn -> Host.filter_diff(new, diff) end)
     host_diff = Task.await(host_task)
     participant_diff = Enum.map(participant_tasks, fn {id, task} -> {id, %{diff: Task.await(task)}} end)
                         |> Enum.filter(fn {_, map} -> map_size(map.diff) != 0 end)
