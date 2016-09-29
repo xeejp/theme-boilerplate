@@ -5,6 +5,8 @@ import { Provider } from 'react-redux'
 import createLogger from 'redux-logger'
 import createSagaMiddleware from 'redux-saga'
 import { createAction, createReducer } from 'redux-act'
+import throttle from 'react-throttle-render'
+
 import reduceReducers from 'reduce-reducers'
 import { create as createJsondiffpatch } from 'jsondiffpatch'
 import clone from 'clone'
@@ -64,9 +66,10 @@ export default function startApp(component, reducer, saga, host=false) {
 
   window.sendData = sendData
 
+  const ThrottledComponent = throttle(component, 50)
   render(
     <Provider store={store}>
-      {React.createElement(component)}
+      {React.createElement(ThrottledComponent)}
     </Provider>,
     document.getElementById("content")
   )
